@@ -1,0 +1,19 @@
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Car Location
+        script(src="./scrpt.js")
+    body
+        table
+            tr
+                th Car Id
+                th longitude
+                th latitiude
+                th is moving
+            for item in listData
+                tr
+                    td #{item.carId}
+                    td #{item.long}
+                    td #{item.lati}
+                    td #{item.hasMoved}
