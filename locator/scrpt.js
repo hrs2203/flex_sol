@@ -1,5 +1,3 @@
-module.exports = (data) => {
-    console.table(data);
-}
-
-
+setInterval(() => {
+    window.location.reload();
+}, 2000);

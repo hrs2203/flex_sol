@@ -4,6 +4,7 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Car Location
         script(src="./scrpt.js")
+        link(rel="stylesheet", href="styl.css")
     body
         table
             tr
@@ -16,4 +17,4 @@ html(lang="en")
                     td #{item.carId}
                     td #{item.long}
                     td #{item.lati}
-                    td #{item.hasMoved}
+                    td(class= item.hasMoved ? "isMoving" : "isStop" ) #{item.hasMoved ? "Moving" : "Stop"}

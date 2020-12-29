@@ -1,0 +1,7 @@
+.isMoving {
+    background-color: rgb(38, 255, 38);
+}
+
+.isStop {
+    background-color: rgb(255, 135, 135);
+}

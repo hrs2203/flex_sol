@@ -2,8 +2,6 @@
 const express = require("express");
 const pug = require("pug");
 
-const htmlFxn = require('./scrpt.js');
-
 // Static Definations
 const app = express();
 
@@ -18,10 +16,11 @@ class Car {
         this.long = long;
         this.lati = lati;
         this.hasMoved = true;
+        this.lastUpdatedCounter = 10;
     }
 
     updateLocation(long, lati) {
-        this.hasMoved = this.calcDistance(this.long, this.lati, long, lati) >= 1 ? true : false;
+        this.hasMoved = this.calcDistance(this.long, this.lati, long, lati) >= 1;
         this.long = long;
         this.lati = lati;
     }
@@ -64,42 +63,63 @@ const updateCarLocation = (car_id, lon, lat) => {
     if (index != -1) {
         registerdList[index].long = lon;
         registerdList[index].lati = lat;
+        registerdList[index].hasMoved = true;
+        registerdList[index].lastUpdatedCounter = 10;
+    }
+}
+
+const updateCarsDetail = () => {
+    var newTime = new Date();
+    for (let index = 0; index < registerdList.length; index++) {
+        registerdList[index].lastUpdatedCounter -= 2;
+        if (registerdList[index].lastUpdatedCounter <= 0 ){
+            registerdList[index].hasMoved = false;
+        }
     }
 }
 
 
 // ========= api calls ===========
 app.get("/", (req, res, next) => {
-
-    setInterval(() => {
-        tempCounter += 1;
-        console.log(tempCounter);
-        htmlFxn(registerdList);
-    }, 1000);
-
+    updateCarsDetail();
     return res.render("car_location.pug", {
-        "listData": registerdList
+        "listData": registerdList,
     });
-
 });
 
+/*
+request format
+{
+    "car_id": "car_21",
+    "lon": 11,
+    "lat": 11
+}
+*/
 app.post('/registerCar', (req, res, next) => {
     car_id = req.body.car_id;
     lon = Number(req.body.lon);
     lat = Number(req.body.lat);
     registerNewCar(car_id, lon, lat);
     return res.json({
-        "status" : "success"
+        "status": "success"
     })
 });
 
+/*
+request format
+{
+    "car_id": "car_21",
+    "lon": 11,
+    "lat": 11
+}
+*/
 app.post('/updateLocation', (req, res, next) => {
     car_id = req.body.car_id;
     lon = Number(req.body.lon);
     lat = Number(req.body.lat);
     updateCarLocation(car_id, lon, lat);
     return res.json({
-        "status" : "success"
+        "status": "success"
     })
 });
 
